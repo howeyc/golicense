@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"go/parser"
 	"go/token"
@@ -142,7 +143,11 @@ func getCombinedLicenses(licensePaths []string, importPaths map[string]string) [
 }
 
 func main() {
+	flag.Parse()
 	pwd, _ := os.Getwd()
+	if flag.Arg(0) != "" {
+		pwd = filepath.Join(os.Getenv("GOPATH"), "src", flag.Arg(0))
+	}
 	rootPackage := filepath.Base(pwd)
 	writeCombinedLicense(os.Stdout, getCombinedLicenses(getLicensePaths(), getImportPaths(pwd, rootPackage)))
 }
